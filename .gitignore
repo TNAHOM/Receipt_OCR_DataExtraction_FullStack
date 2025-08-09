@@ -1,0 +1,8 @@
+.env
+
+.github/
+
+node_modules/
+unnessassry/
+
+uploads/

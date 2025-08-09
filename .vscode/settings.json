@@ -1,0 +1,6 @@
+{
+    "javascript.validate.enable": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    }
+}
