@@ -14,6 +14,78 @@ Core:
 - Next.js 15 (frontend upload + results view)
 - Docker & docker compose (local orchestration)
 
+## Folder Structure
+
+```folderStructure
+└── 📁Receipt_OCR_DataExtraction_FullStack
+    └── 📁backend
+        └── 📁controllers
+            ├── receipt.controller.ts
+        └── 📁generated
+            └── 📁prisma
+        └── 📁graphql
+            └── 📁resolvers
+                ├── item.resolver.ts
+                ├── receipt.resolver.ts
+            └── 📁typeDefs
+                ├── item.typeDef.ts
+                ├── receipt.typeDef.ts
+            ├── schema.ts
+        └── 📁prisma
+            └── 📁migrations
+            ├── schema.prisma
+        └── 📁routes
+            ├── receipt.route.ts
+        └── 📁services
+            └── 📁parsers
+                ├── aiFormatter.ts
+                ├── parseProximity.ts
+            ├── upload.service.ts
+        └── 📁types
+            ├── receipt.ts
+        └── 📁unnessassry
+            ├── proximityParser.js
+            ├── textractBlockResponse.txt
+        └── 📁uploads
+        ├── .dockerignore
+        ├── .env
+        ├── .gitignore
+        ├── apolloServer.ts
+        ├── app.ts
+        ├── Dockerfile
+    └── 📁frontend
+        └── 📁public
+        └── 📁src
+            └── 📁app
+                └── 📁lib
+                    ├── apolloClient.ts
+                ├── ClientProviders.tsx
+                ├── favicon.ico
+                ├── globals.css
+                ├── layout.tsx
+                ├── page.tsx
+            └── 📁components
+                ├── ItemsTable.tsx
+                ├── ProcessedResultCard.tsx
+                ├── ReceiptsList.tsx
+                ├── UploadForm.tsx
+            └── 📁graphql
+                └── 📁mutations
+                    ├── upload.ts
+                └── 📁queries
+                    ├── receipts.ts
+        ├── .dockerignore
+        ├── .env
+        ├── .gitignore
+        ├── Dockerfile
+        ├── eslint.config.mjs
+        ├── README.md
+    └── 📁TestDataSet
+    ├── .gitignore
+    ├── docker-compose.yml
+    └── README.md
+```
+
 ## High-Level Architecture
 
 ```text
