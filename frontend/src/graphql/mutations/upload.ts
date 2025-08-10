@@ -10,6 +10,7 @@ export const UPLOAD_AND_PROCESS = gql`
           name
           quantity
           price
+          lineTotal
         }
         receipt {
           purchaseDate
