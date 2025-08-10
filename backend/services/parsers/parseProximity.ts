@@ -1,27 +1,32 @@
-function extractLines(blocks) {
+import { ParsedLine, ParsedReceipt, TextractBlock, ParsedRow } from "../../types/receipt";
+
+function extractLines(blocks: TextractBlock[]): ParsedLine[] {
   return (blocks || [])
     .filter(
       (b) =>
         b.BlockType === "LINE" &&
-        b.Text &&
-        b.Geometry &&
-        b.Geometry.BoundingBox,
+        !!b.Text &&
+        !!b.Geometry &&
+        !!b.Geometry.BoundingBox,
     )
-    .map((b) => ({
-      id: b.Id,
-      text: b.Text.trim(),
-      top: b.Geometry.BoundingBox.Top,
-      left: b.Geometry.BoundingBox.Left,
-      width: b.Geometry.BoundingBox.Width,
-      height: b.Geometry.BoundingBox.Height,
-      bottom: b.Geometry.BoundingBox.Top + b.Geometry.BoundingBox.Height,
-      raw: b,
-    }))
+    .map((b) => {
+      const bb = b.Geometry!.BoundingBox!;
+      return {
+        id: b.Id,
+        text: b.Text!.trim(),
+        top: bb.Top,
+        left: bb.Left,
+        width: bb.Width,
+        height: bb.Height,
+        bottom: bb.Top + bb.Height,
+        raw: b,
+      } as ParsedLine;
+    })
     .sort((a, b) => a.top - b.top || a.left - b.left);
 }
 
-function groupHorizontal(allLines) {
-  // Group lines by similar top coordinate (within half the max height in group)
+function groupHorizontal(allLines: ParsedLine[]): ParsedRow[] {
+  // Group lines by similar top coordinate (within half the max height in group) -> this will help to group by proximity
   const sorted = [...allLines].sort((a, b) => a.top - b.top || a.left - b.left);
   const groups = [];
   for (const line of sorted) {
@@ -58,18 +63,11 @@ function groupHorizontal(allLines) {
         // lineCount: g.lines.length,
         // original: g.lines.map(l=>({ id:l.id, text:l.text, top:l.top, left:l.left, width:l.width, height:l.height }))
       };
-    })
-    .sort((a, b) => a.top - b.top);
+  });
 }
 
-function parseProximity(blocks) {
-  const lines = extractLines(blocks);
+export function parseProximity(blocks: TextractBlock[]): ParsedReceipt {
+  const lines = extractLines(blocks || []);
   const rows = groupHorizontal(lines);
-  return {
-    rows,
-  };
+  return { rows };
 }
-
-module.exports = {
-  parseProximity,
-};
