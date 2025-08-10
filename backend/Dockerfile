@@ -2,22 +2,20 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-COPY backend/package*.json ./
+COPY package*.json ./
 
 RUN npm install --production=false
 
-COPY backend/prisma ./prisma
+COPY prisma ./prisma
 
 RUN npx prisma generate
 
-COPY backend/tsconfig.json .
-COPY backend/. ./
+COPY tsconfig.json ./
+COPY . .
 
 RUN npm run build
 
 RUN mkdir -p uploads
-
-ENV NODE_ENV=production
 
 EXPOSE 5000
 

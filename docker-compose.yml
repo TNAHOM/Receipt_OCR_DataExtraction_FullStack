@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   db:
     image: postgres:15-alpine
@@ -9,6 +7,46 @@ services:
       - POSTGRES_DB=receipts
     volumes:
       - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U receipts"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    env_file:
+      - ./backend/.env
+    environment:
+      DATABASE_URL: postgres://receipts:receipts@db:5432/receipts
+      PORT: 5000
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - backend_uploads:/app/uploads
+    ports:
+      - "5000:5000"
+    
+  
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    env_file:
+      - ./frontend/.env
+    environment:
+      NEXT_PUBLIC_GRAPHQL_URL: http://localhost:5000/graphql
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+
 
 volumes:
-  db_data:
+  pgdata:
+  backend_uploads:
