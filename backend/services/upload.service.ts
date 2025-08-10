@@ -36,8 +36,8 @@ const saveItems = async (data: AIFormattedResult): Promise<{ success: boolean; e
     const itemToCreate = data.items.map((item: AIItem) => ({
       name: item.name,
       quantity: item.quantity,
-      // price: item.price,
-      // lineTotal: item.lineTotal
+      price: item.price,
+      lineTotal: item.lineTotal,
       receiptId,
     }));
 
