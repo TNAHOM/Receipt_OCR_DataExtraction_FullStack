@@ -28,23 +28,17 @@ async function startApolloServer() {
   await server.start();
   console.log("Apollo Server started");
   
-  // This is where you configure the middleware for the /graphql endpoint
   app.use(
     "/graphql",
-    // The order of middleware is VERY important!
-    // 1. CORS
     cors<cors.CorsRequest>({
-      origin: "http://localhost:3000", // Be specific for credentials to work
+      origin: "http://localhost:3000",
       credentials: true,
     }),
-    // 2. Body parsing (for regular JSON requests)
     express.json(),
-    // 3. The graphql-upload middleware
     graphqlUploadExpress({
-      maxFileSize: 10000000, // 10 MB
+      maxFileSize: 10000000,
       maxFiles: 1,
     }),
-    // 4. The Apollo Server middleware
     expressMiddleware(server, {
       context: async () => ({ prisma }),
     })
